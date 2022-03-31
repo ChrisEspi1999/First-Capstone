@@ -12,14 +12,11 @@ public class CaTEringCapstoneCLI {
 
     private List<Product> productList = new ArrayList<>();
     private Scanner userInput = new Scanner(System.in);
-    private double balance = 0; // BigDecimal?
     private double currentMoneyAvailable = 0;
     boolean keepGoing = true;
     private String change = "";
 
-
-    public CaTEringCapstoneCLI(Menu menu) { // audit parameter?
-
+    public CaTEringCapstoneCLI(Menu menu) {
         this.menu = menu;
     }
 
@@ -30,10 +27,8 @@ public class CaTEringCapstoneCLI {
     }
 
     public void run() {
-
-
         try {
-            File file = new File("catering.csv");
+            File file = new File("catering1.csv");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -57,14 +52,12 @@ public class CaTEringCapstoneCLI {
         } catch (FileNotFoundException e) {
             System.out.println();
         }
-        System.out.println("Main Menu Options: ");
+        System.out.println("MAIN MENU: ");
         displayMainMenu();
-
     }
 
     public void displayMainMenu(){
         do {
-
             this.menu.DisplayMainMenu();
             String menuInput = userInput.nextLine().toUpperCase();
 
@@ -80,24 +73,24 @@ public class CaTEringCapstoneCLI {
             } else {
                 System.out.println("Invalid input");
             }
-
         } while (keepGoing);
     }
 
     public void displayItems() {
-
-        System.out.println("Available Items: ");
-        for (Product product : productList)
-            System.out.println(product.getLocation() + " " + product.getName() + " " + product.getType() + " $" + product.getPrice() + " Available: " + product.getQuantity());
+        System.out.println("AVAILABLE ITEMS: ");
+        
+            for (Product product : productList)
+            System.out.println("(" + product.getLocation() + ") " + product.getName() + " " + product.getType() + ":\t $" + product.getPrice() + "\t Available: " + product.getQuantity());
     }
 
     public void purchaseItems() {
+        System.out.println("");
 
         do {
-            System.out.println("Purchase Menu Options: ");
+            System.out.println("PURCHASE MENU: ");
             this.menu.DisplayPurchaseMenu();
-            System.out.println("Current available balance: $" + String.format("%.2f", currentMoneyAvailable)
-            );
+            System.out.println("");
+            System.out.println("Current available balance: $" + String.format("%.2f", currentMoneyAvailable));
 
             String menuInput = userInput.nextLine().toUpperCase();
 
@@ -109,7 +102,9 @@ public class CaTEringCapstoneCLI {
 
                 getChange();
                 System.out.println("Transaction finished");
+                System.out.println("");
                 System.out.println(change);
+                System.out.println("");
 
                 keepGoing = false;
                 displayMainMenu();
@@ -120,24 +115,10 @@ public class CaTEringCapstoneCLI {
         } while (keepGoing);
     }
 
-    public String getChange(){
-
-        int dollars = (int) currentMoneyAvailable;
-        double changeMinusDollars = currentMoneyAvailable - (1.0 * dollars);
-        int quarters = (int) (changeMinusDollars / 0.25);
-        double changeMinusQuarters = changeMinusDollars - (quarters * 0.25);
-        int dimes = (int) (changeMinusQuarters / 0.10);
-        double changeMinusDimes = changeMinusQuarters - (dimes * 0.1);
-        int nickels = (int) (changeMinusDimes / 0.05);
-
-        change = "Change: " + dollars + " dollars, " + quarters + " quarters, " + dimes + " dimes, and " + nickels + " nickels";
-        currentMoneyAvailable = 0;
-        return change;
-    }
-
     public void feedMoney() {
+        System.out.println("");
         do {
-            System.out.println("Insert money (Accepts $1, $5, $10, or $20) or enter 0 to return to Purchase Menu: ");
+            System.out.println("INSERT MONEY: (Accepts $1, $5, $10, or $20) OR Enter 0 to return to PURCHASE MENU: ");
             int moneyInput = Integer.parseInt(userInput.nextLine());
 
             if (moneyInput == 1 || moneyInput == 5 || moneyInput == 10 || moneyInput == 20) {
@@ -148,17 +129,15 @@ public class CaTEringCapstoneCLI {
             } else {
                 System.out.println("Invalid Input");
             }
-
-
         } while (keepGoing);
     }
 
     public void selectItems() {
-
-        System.out.println("Select an Item: ");
+        System.out.println("");
+        System.out.println("SELECT ITEM: ");
 
         for (Product product : productList)
-            System.out.println(product.getLocation() + " " + product.getName() + " " + product.getType() + " $" + product.getPrice() + " Available: " + product.getQuantity());
+            System.out.println(product.getLocation() + " " + product.getName() + " " + product.getType() + ": $" + product.getPrice() + " Available: " + product.getQuantity());
 
         String itemInput = userInput.nextLine().toUpperCase();
 
@@ -171,9 +150,10 @@ public class CaTEringCapstoneCLI {
                         purchaseItems();
                     } else {
                         product.decreaseInventory();
-                        product.getSound();
-                        currentMoneyAvailable -= product.getPrice();
-                        System.out.println();
+                        if(product.getQuantity() != 0){
+                            product.getSound();
+                            currentMoneyAvailable -= product.getPrice();
+                        }
                         purchaseItems();
                     }
                 }
@@ -182,6 +162,23 @@ public class CaTEringCapstoneCLI {
             System.out.println("Invalid selection");
             purchaseItems();
         }
+    }
+
+    public String getChange(){
+
+        int dollars = (int) currentMoneyAvailable;
+        double changeMinusDollars = currentMoneyAvailable - (1.0 * dollars);
+        int quarters = (int) (changeMinusDollars / 0.25);
+        double changeMinusQuarters = changeMinusDollars - (quarters * 0.25);
+        int dimes = (int) (changeMinusQuarters / 0.10);
+        double changeMinusDimes = changeMinusQuarters - (dimes * 0.1);
+        int nickels = (int) (changeMinusDimes / 0.05);
+
+        change = "CHANGE: " + "\r\n" + "Dollar bills: " + dollars + "\r\n" + "Quarters: "+ quarters + "\r\n" + "Dimes: " + dimes + "\r\n" + "Nickels: " + nickels;
+        System.out.println("");
+        currentMoneyAvailable = 0;
+
+        return change;
     }
 }
 
