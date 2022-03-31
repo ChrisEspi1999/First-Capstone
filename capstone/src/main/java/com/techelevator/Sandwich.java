@@ -2,8 +2,16 @@ package com.techelevator;
 
 public class Sandwich extends Product {
 
+    private int quantity;
+
     public Sandwich(String location, String name, String type, double price) {
+
         super(location, name, type, price);
+    }
+
+    public Sandwich(String location, String name, String type, double price, int quantity) {
+        super(location, name, type, price);
+        this.quantity = quantity;
     }
 
     @Override

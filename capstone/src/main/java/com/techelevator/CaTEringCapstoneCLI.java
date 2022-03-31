@@ -13,20 +13,13 @@ public class CaTEringCapstoneCLI {
 
     private Menu menu;
 
-    private static final String MAIN_MENU_DISPLAY_ITEMS = "(D) Display catering items";
-    private static final String MAIN_MENU_PURCHASE = "(P) Purchase";
-    private static final String MAIN_MENU_EXIT = "(E) Exit";
-    private static final String[] MAIN_MENU_OPTIONS = {MAIN_MENU_DISPLAY_ITEMS, MAIN_MENU_PURCHASE, MAIN_MENU_EXIT};
-
-    private static final String PURCHASE_MENU_FEED_MONEY = "(M) Feed Money)";
-    private static final String PURCHASE_MENU_SELECT_ITEM = "(S) Select Items)";
-    private static final String PURCHASE_MENU_FINISH_TRANSACTION = "(F) Finish transaction)";
-    private static final String[] PURCHASE_MENU_OPTIONS = {PURCHASE_MENU_FEED_MONEY, PURCHASE_MENU_SELECT_ITEM, PURCHASE_MENU_FINISH_TRANSACTION};
 
     private double change;
-    private List<String> list = new ArrayList<>();
+    private List<Product> productList = new ArrayList<>();
     private Scanner userInput = new Scanner(System.in);
-    private double balance; // BigDecimal?
+    private double balance = 0; // BigDecimal?
+    private double currentMoneyAvailable = 0;
+    boolean keepGoing = true;
 
 
     public CaTEringCapstoneCLI(Menu menu) { // audit parameter?
@@ -55,7 +48,6 @@ public class CaTEringCapstoneCLI {
                 String type = strArr[2];
                 double price = Double.parseDouble(strArr[3]);
 
-                List<Product> productList = new ArrayList<>();
                 if (strArr[2].equals("Dessert")) {
                     productList.add(new Dessert(location, name, type, price));
                 } else if (strArr[2].equals("Drink")) {
@@ -69,25 +61,18 @@ public class CaTEringCapstoneCLI {
         } catch (FileNotFoundException e) {
             System.out.println();
         }
-    }
-    public
-
-        System.out.println("Welcome to our catering menu! \nPlease select an option.");
-        boolean keepGoing = true;
-        for (int i = 0; i < MAIN_MENU_OPTIONS.length; i++) {
-            System.out.println(MAIN_MENU_OPTIONS[i]);
-        }
-
 
         do {
+            this.menu.DisplayMainMenu();
 
+            System.out.println("Main Menu Options: ");
             String menuInput = userInput.nextLine().toUpperCase();
 
             if (menuInput.equals("D")) {
                 displayItems();
             }
             if (menuInput.equals("P")) {
-
+                purchaseItems();
             }
             if (menuInput.equals("E")) {
                 keepGoing = false;
@@ -95,38 +80,74 @@ public class CaTEringCapstoneCLI {
                 System.exit(0);
             }
         } while (keepGoing);
+
     }
 
     public void displayItems() {
 
+        System.out.println("Available Items: ");
+        for (Product product : productList)
+            System.out.println(product.getLocation() + " " + product.getName() + " " + product.getType() + " " + product.getPrice() + " " + product.getQuantity());
+    }
 
-//		 Restock inventory (At the start of every run)
+    public void purchaseItems(){
 
+        do {
+            this.menu.DisplayPurchaseMenu();
+
+            System.out.println("Purchase Menu Options: ");
+            String menuInput = userInput.nextLine().toUpperCase();
+
+            if (menuInput.equals("M")) {
+                feedMoney();
+            }
+            if (menuInput.equals("S")) {
+                selectItems();
+            }
+            if (menuInput.equals("F")) {
+                System.out.println("Have a good day!");
+                keepGoing = false;
+                System.exit(0);
+            }
+        } while (keepGoing);
+    }
+
+    public void feedMoney(){
+        do{
+            System.out.println("Insert money (Accepts $1, $5, $10, or $20) or enter (B) to return to Purchase Menu: ");
+            int moneyInput = Integer.parseInt(userInput.nextLine());
+
+            if(moneyInput == 1 || moneyInput == 5 || moneyInput == 10 || moneyInput == 20){
+                currentMoneyAvailable += 1.0 * moneyInput;
+            }
+            else{
+                System.out.println("Invalid Input");
+            }
+
+            System.out.println("Current money available: " + currentMoneyAvailable);
+
+            if(userInput.nextLine().equals("B")){
+                keepGoing = false;
+            }
+        }while(keepGoing);
+    }
+
+    public void selectItems(){
+
+        System.out.println("Select an Item: ");
 
         for (Product product : productList)
-            System.out.println(product.getLocation() + product.getName());
+            System.out.println(product.getLocation() + " " + product.getName() + " " + product.getType() + " " + product.getPrice() + " " + product.getQuantity());
+
+        String itemInput = userInput.nextLine().toUpperCase();
+
+        if()
+
+
     }
 
 
-//		while (true) {
-    //  to do -- build out main menu
-			/*
-				Loop:
-			    Display Main Menu
-			    Get User Choice
-			    Display next menu/options accordingly
-			 */
-
 }
 
-		/*
-			Loop:
-			Display Purchase Menu
-			Get User Choice
-			Display next menu/options accordingly
-				- For each option: call method 
-		*/
-
-		}
 
 
