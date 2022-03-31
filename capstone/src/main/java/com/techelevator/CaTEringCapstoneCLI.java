@@ -4,10 +4,7 @@ import com.techelevator.view.Menu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class CaTEringCapstoneCLI {
 
@@ -61,11 +58,10 @@ public class CaTEringCapstoneCLI {
         } catch (FileNotFoundException e) {
             System.out.println();
         }
+        System.out.println("Main Menu Options: ");
 
         do {
             this.menu.DisplayMainMenu();
-
-            System.out.println("Main Menu Options: ");
             String menuInput = userInput.nextLine().toUpperCase();
 
             if (menuInput.equals("D")) {
@@ -90,12 +86,14 @@ public class CaTEringCapstoneCLI {
             System.out.println(product.getLocation() + " " + product.getName() + " " + product.getType() + " " + product.getPrice() + " " + product.getQuantity());
     }
 
-    public void purchaseItems(){
+    public void purchaseItems() {
 
         do {
-            this.menu.DisplayPurchaseMenu();
-
             System.out.println("Purchase Menu Options: ");
+            this.menu.DisplayPurchaseMenu();
+            System.out.println("Current available balance: $" + String.format("%.2f", currentMoneyAvailable)
+            );
+
             String menuInput = userInput.nextLine().toUpperCase();
 
             if (menuInput.equals("M")) {
@@ -112,27 +110,25 @@ public class CaTEringCapstoneCLI {
         } while (keepGoing);
     }
 
-    public void feedMoney(){
-        do{
-            System.out.println("Insert money (Accepts $1, $5, $10, or $20) or enter (B) to return to Purchase Menu: ");
+    public void feedMoney() {
+        do {
+            System.out.println("Insert money (Accepts $1, $5, $10, or $20) or enter 0 to return to Purchase Menu: ");
             int moneyInput = Integer.parseInt(userInput.nextLine());
 
-            if(moneyInput == 1 || moneyInput == 5 || moneyInput == 10 || moneyInput == 20){
+            if (moneyInput == 1 || moneyInput == 5 || moneyInput == 10 || moneyInput == 20) {
                 currentMoneyAvailable += 1.0 * moneyInput;
-            }
-            else{
+                System.out.println("Current money available: " + String.format("%.2f", currentMoneyAvailable));
+            } else if (moneyInput == 0) {
+                purchaseItems();
+            } else {
                 System.out.println("Invalid Input");
             }
 
-            System.out.println("Current money available: " + currentMoneyAvailable);
 
-            if(userInput.nextLine().equals("B")){
-                keepGoing = false;
-            }
-        }while(keepGoing);
+        } while (keepGoing);
     }
 
-    public void selectItems(){
+    public void selectItems() {
 
         System.out.println("Select an Item: ");
 
@@ -141,13 +137,26 @@ public class CaTEringCapstoneCLI {
 
         String itemInput = userInput.nextLine().toUpperCase();
 
-        if()
+        for (Product product : productList) {
 
+            if (product.getLocation().equals(itemInput)) {
+                if (currentMoneyAvailable - product.getPrice() < 0) {
+                    System.out.println("Not enough money");
+                    purchaseItems();
+                } else {
+                    product.decreaseInventory();
+                    product.getSound();
+                    currentMoneyAvailable -= product.getPrice();
+                    System.out.println();
+                }
 
+            }
+        }
     }
-
-
 }
+
+
+
 
 
 

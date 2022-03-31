@@ -26,8 +26,8 @@ public class Menu {
     }
 
     public void DisplayPurchaseMenu() {
-        for (int i = 0; i < MAIN_MENU_OPTIONS.length; i++) {
-            System.out.println(MAIN_MENU_OPTIONS[i]);
+        for (int i = 0; i < PURCHASE_MENU_OPTIONS.length; i++) {
+            System.out.println(PURCHASE_MENU_OPTIONS[i]);
         }
     }
 
