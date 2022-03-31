@@ -7,7 +7,16 @@ import java.util.Scanner;
 
 public class Menu {
 
-// to-do -- build out
+    public void MainMenu(){
 
+        /*
+            - Constructor: FILE I/O
+            - Get choice input from user
+            - Methods: getMainMenuChoiceInput, getChoiceFromMainMenu, getMoneyInput, displayMainMenu
+         */
+
+
+
+    }
 
 }
