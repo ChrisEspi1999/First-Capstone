@@ -2,8 +2,8 @@ package com.techelevator;
 
 public class Dessert extends Product{
 
-    public Dessert(String name, double price) {
-        super(name, price);
+    public Dessert(String location, String name, String type, double price) {
+        super(location, name, type, price);
     }
 
     @Override

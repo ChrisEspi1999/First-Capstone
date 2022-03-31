@@ -1,13 +1,13 @@
 package com.techelevator;
 
-public class Sandwich extends Product{
+public class Sandwich extends Product {
 
-    public Sandwich(String name, double price) {
-        super(name, price);
+    public Sandwich(String location, String name, String type, double price) {
+        super(location, name, type, price);
     }
 
     @Override
-    public void getSound(){
+    public void getSound() {
         System.out.println("Sandwich So Delicious, Yum!");
     }
 }
