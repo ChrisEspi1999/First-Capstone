@@ -14,9 +14,9 @@ public class Menu {
     public static final String MAIN_MENU_EXIT = "(E) Exit";
     public static final String[] MAIN_MENU_OPTIONS = {MAIN_MENU_DISPLAY_ITEMS, MAIN_MENU_PURCHASE, MAIN_MENU_EXIT};
 
-    public static final String PURCHASE_MENU_FEED_MONEY = "(M) Feed Money)";
-    public static final String PURCHASE_MENU_SELECT_ITEM = "(S) Select Items)";
-    public static final String PURCHASE_MENU_FINISH_TRANSACTION = "(F) Finish transaction)";
+    public static final String PURCHASE_MENU_FEED_MONEY = "(M) Feed Money";
+    public static final String PURCHASE_MENU_SELECT_ITEM = "(S) Select Items";
+    public static final String PURCHASE_MENU_FINISH_TRANSACTION = "(F) Finish transaction";
     public static final String[] PURCHASE_MENU_OPTIONS = {PURCHASE_MENU_FEED_MONEY, PURCHASE_MENU_SELECT_ITEM, PURCHASE_MENU_FINISH_TRANSACTION};
 
     public void DisplayMainMenu() {
