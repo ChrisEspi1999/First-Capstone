@@ -1,3 +1,4 @@
+
 package com.techelevator.view;
 
 import com.techelevator.Product;
@@ -9,8 +10,8 @@ import java.time.format.DateTimeFormatter;
 
 
 public class Audit {
-    private final File output = new File("audit.txt");
-    private LocalDateTime currentTime;
+    private static LocalDateTime currentTime;
+    private static File output;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
 
@@ -27,12 +28,13 @@ public class Audit {
         return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")) + " " + name + " (" + location + ") " + balance + " Balance: " + moneyStr);
     }
 
-    public String transaction(String balance, String moneyStr) {
+    public static String transaction(String balance, String moneyStr) {
         currentTime = LocalDateTime.now();
         return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")) + " Change: " + balance + " Balance: " + moneyStr);
     }
 
-    private String writeAudit(String auditor) {
+    private static String writeAudit(String auditor) {
+        File output = new File("audit.txt");
         String file = "";
         try (PrintWriter writer = new PrintWriter(new FileOutputStream(output, true))) {
             writer.println(auditor);
@@ -42,3 +44,5 @@ public class Audit {
         return file;
     }
 }
+
+

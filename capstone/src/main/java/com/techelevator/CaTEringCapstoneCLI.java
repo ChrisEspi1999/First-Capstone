@@ -15,13 +15,16 @@ public class CaTEringCapstoneCLI {
     private List<Product> productList = new ArrayList<>();
     private Scanner userInput = new Scanner(System.in);
     private double currentMoneyAvailable = 0;
-    boolean keepGoing = true;
     private String change = "";
     private String menuInput = "";
     private String purchaseInput = "";
     private String itemInput = "";
     private int moneyInput = 0;
     NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
+//    private BigDecimal currentMoneyAvailable = new BigDecimal("0.00");
+//    private BigDecimal moneyInput = new BigDecimal("0.00");
+
 
     public CaTEringCapstoneCLI(Menu menu) {
         this.menu = menu;
@@ -67,6 +70,7 @@ public class CaTEringCapstoneCLI {
     }
 
     public void displayMainMenu() {
+        boolean keepGoing = true;
         do {
             System.out.println("MAIN MENU: ");
             this.menu.DisplayMainMenu();
@@ -96,7 +100,9 @@ public class CaTEringCapstoneCLI {
     }
 
     public void purchaseItems() {
+        getChange dispense = new getChange();
         System.out.println("");
+        boolean keepGoing = true;
 
         do {
             System.out.println("PURCHASE MENU: ");
@@ -113,14 +119,31 @@ public class CaTEringCapstoneCLI {
                 selectItems();
             } else if (menuInput.equals("F")) {
 
-                getChange();
                 System.out.println("Transaction finished");
-                System.out.println("");
-                System.out.println(change);
-                System.out.println("");
 
-                keepGoing = false; // SOP after saying "returning to main menu
+                System.out.println(dispense.change(currentMoneyAvailable).toString());
+                String balance = formatter.format(currentMoneyAvailable);
+
+                currentMoneyAvailable = 0;
+                String moneyStr = formatter.format(currentMoneyAvailable);
+
+                String audit = new Audit().transaction(balance, moneyStr);
+
+                keepGoing = false;
                 displayMainMenu();
+
+//                System.out.println("Transaction finished");
+//
+//                getChange();
+//                System.out.println(change);
+//
+//                String balance = formatter.format(currentMoneyAvailable);
+//                currentMoneyAvailable = 0;
+//                String moneyStr = formatter.format(currentMoneyAvailable);
+//                String audit = new Audit().transaction(balance, moneyStr);
+//
+//                keepGoing = false; // SOP after saying "returning to main menu
+//                displayMainMenu();
 
             } else {
                 System.out.println("Invalid input, returning to PURCHASE MENU");
@@ -131,6 +154,8 @@ public class CaTEringCapstoneCLI {
 
     public void feedMoney() {
         System.out.println(""); // Exception for user inputting decimal number or letter- disconnects
+
+        boolean keepGoing = true;
 
         try {
             do {
@@ -146,11 +171,11 @@ public class CaTEringCapstoneCLI {
                 } else {
                     System.out.println("Invalid Input, insert $1, $5, $10, or $20");
                     System.out.println("");
-
                 }
+
                 double input = moneyInput * 1.0;
                 String audit = new Audit().moneyFeed(input, currentMoneyAvailable);
-            } while (keepGoing);
+            } while (true);
         } catch (NumberFormatException e) {
             System.out.println("Invalid Input");
         }
@@ -170,7 +195,6 @@ public class CaTEringCapstoneCLI {
 
         boolean isFound = false;
         for (Product product : productList) {
-
 
             if (product.getLocation().equals(itemInput)) {
                 isFound = true;
@@ -228,3 +252,5 @@ public class CaTEringCapstoneCLI {
         return change;
     }
 }
+
+
