@@ -128,23 +128,29 @@ public class CaTEringCapstoneCLI {
 
     public void feedMoney() {
         System.out.println(""); // Exception for user inputting decimal number or letter- disconnects
-        do {
-            System.out.println("INSERT MONEY: (Accepts $1, $5, $10, or $20) OR Enter 0 to return to PURCHASE MENU: ");
-            int moneyInput = Integer.parseInt(userInput.nextLine());
 
-            if (moneyInput == 1 || moneyInput == 5 || moneyInput == 10 || moneyInput == 20) {
-                currentMoneyAvailable += 1.0 * moneyInput;
-                System.out.println("Current money available: $" + String.format("%.2f", currentMoneyAvailable)); // SOP ""
-            } else if (moneyInput == 0) {
-                purchaseItems();
-            } else {
-                System.out.println("Invalid Input, insert $1, $5, $10, or $20");
-                System.out.println("");
-            }
-        } while (keepGoing);
+       try {
+           do {
+               System.out.println("INSERT MONEY: (Accepts $1, $5, $10, or $20) OR Enter 0 to return to PURCHASE MENU: ");
+               int moneyInput = Integer.parseInt(userInput.nextLine());
+
+               if (moneyInput == 1 || moneyInput == 5 || moneyInput == 10 || moneyInput == 20) {
+                   currentMoneyAvailable += 1.0 * moneyInput;
+                   System.out.println("Current money available: $" + String.format("%.2f", currentMoneyAvailable)); // SOP ""
+               } else if (moneyInput == 0) {
+                   purchaseItems();
+               } else {
+                   System.out.println("Invalid Input, insert $1, $5, $10, or $20");
+                   System.out.println("");
+               }
+           } while (keepGoing);
+       }catch (NumberFormatException e){
+           System.out.println("Invalid Input");
+       }
+
     }
 
-    public void selectItems() { 
+    public void selectItems() {
         System.out.println("");
         System.out.println("SELECT ITEM: ");
 
@@ -154,7 +160,8 @@ public class CaTEringCapstoneCLI {
         String itemInput = userInput.nextLine().toUpperCase();
 
 
-        try{
+
+            try{
             for (Product product : productList) {
 
                 if (product.getLocation().equals(itemInput)) {
@@ -166,16 +173,14 @@ public class CaTEringCapstoneCLI {
                         if(product.getQuantity() != 0){
                             product.getSound();
                             currentMoneyAvailable -= product.getPrice();
+                            purchaseItems();
                         }
-                        purchaseItems();
                     }
-                }
-                else{
-                    System.out.println("Invalid selection, returning to PURCHASE MENU");
+
                 }
             }
 
-        }catch(Exception e){
+        }catch(NullPointerException e){
             System.out.println("Invalid selection, returning to PURCHASE MENU");
             purchaseItems();
         }
