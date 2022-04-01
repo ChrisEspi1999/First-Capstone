@@ -140,7 +140,7 @@ public class CaTEringCapstoneCLI {
                 if (moneyInput == 1 || moneyInput == 5 || moneyInput == 10 || moneyInput == 20) {
                     currentMoneyAvailable += 1.0 * moneyInput;
                     String moneyAvailable = formatter.format(currentMoneyAvailable);
-                    System.out.println("Current money available: $" + moneyAvailable); // SOP ""
+                    System.out.println("Current money available: " + moneyAvailable); // SOP ""
                 } else if (moneyInput == 0) {
                     purchaseItems();
                 } else {
@@ -201,12 +201,23 @@ public class CaTEringCapstoneCLI {
         String balance = formatter.format(currentMoneyAvailable);
 
         int dollars = (int) currentMoneyAvailable;
-        double changeMinusDollars = currentMoneyAvailable - (1.0 * dollars);
-        int quarters = (int) (changeMinusDollars / 0.25);
-        double changeMinusQuarters = changeMinusDollars - (quarters * 0.25);
-        int dimes = (int) (changeMinusQuarters / 0.10);
-        double changeMinusDimes = changeMinusQuarters - (dimes * 0.1);
-        int nickels = (int) (changeMinusDimes / 0.05);
+        int quarters = 0;
+        int dimes = 0;
+        int nickels = 0;
+        double n = currentMoneyAvailable - dollars;
+
+        while (n >= 0.25) {
+            quarters++;
+            n -= 0.25;
+        }
+        while (n >= 0.10) {
+            dimes++;
+            n -= 0.10;
+        }
+        while (n >= 0.05) {
+            nickels++;
+            n -= 0.05;
+        }
 
         change = "CHANGE: " + "Dollar bills: " + dollars + ", Quarters: " + quarters + ", Dimes: " + dimes + ", Nickels: " + nickels;
         System.out.println("");
@@ -217,9 +228,3 @@ public class CaTEringCapstoneCLI {
         return change;
     }
 }
-
-
-
-
-
-
