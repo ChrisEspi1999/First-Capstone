@@ -90,7 +90,7 @@ public class CaTEringCapstoneCLI {
         System.out.println("AVAILABLE ITEMS: ");
 
         for (Product product : productList)
-            System.out.println("(" + product.getLocation() + ") " + product.getName() + " " + product.getType() + ":\t $" + product.getPrice() + "\t Available: " + product.getQuantity());
+            System.out.println("(" + product.getLocation() + ") " + product.getName() + " " + product.getType() + ":\t $" + product.getPrice(itemInput) + "\t Available: " + product.getQuantity());
     }
 
     public void purchaseItems() {
@@ -158,31 +158,36 @@ public class CaTEringCapstoneCLI {
         System.out.println("SELECT ITEM: ");
 
         for (Product product : productList) {
-            System.out.println("(" + product.getLocation() + ") " + product.getName() + " " + product.getType() + ": $" + product.getPrice() + " Available: " + product.getQuantity()); // ()
+            System.out.println("(" + product.getLocation() + ") " + product.getName() + " " + product.getType() + ": $" + product.getPrice(itemInput) + " Available: " + product.getQuantity()); // ()
+
         }
+
         String itemInput = userInput.nextLine().toUpperCase();
 
         boolean isFound = false;
-//        try {
             for (Product product : productList) {
+
 
                 if (product.getLocation().equals(itemInput)) {
                     isFound = true;
-                    if (currentMoneyAvailable - product.getPrice() < 0 && product.getLocation().equals(itemInput)) {
+
+                    if (currentMoneyAvailable - product.getPrice(itemInput) < 0 && product.getLocation().equals(itemInput)) {
                         System.out.println("Not enough money");
+
                     } else {
                         product.decreaseInventory();
                         if (product.getQuantity() != 0) {
                             product.getSound();
-                            currentMoneyAvailable -= product.getPrice();
+                            currentMoneyAvailable -= product.getPrice(itemInput);
+
                         }
-                    }
-//                }String audit = new Audit().itemPurchased()
+//                    }String audit = new Audit().itemPurchased(productList.get(Integer.parseInt(itemInput)).getLocation(), productList.get(Integer.parseInt(itemInput)).getName(), productList.get(Integer.parseInt(itemInput)).getType(), productList.get(Integer.parseInt(itemInput)).getPrice, currentMoneyAvailable);
+                }
             }if (!isFound){
             System.out.println("Invalid selection, returning to PURCHASE MENU");
         }
-        }
-    }
+        }}
+
 
 
 
@@ -200,6 +205,7 @@ public class CaTEringCapstoneCLI {
         System.out.println("");
         currentMoneyAvailable = 0;
 
+        String audit = new Audit().transaction(change, currentMoneyAvailable);
         return change;
     }
 }

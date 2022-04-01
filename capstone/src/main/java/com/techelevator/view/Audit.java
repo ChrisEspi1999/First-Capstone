@@ -19,12 +19,12 @@ public class Audit {
 
     public String itemPurchased(String location, String name, String type, double cost, double balance) {
         currentTime = LocalDateTime.now();
-        return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")) + " " + location + " " + name + " " + location + " $" + cost + " $" + balance);
+        return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")) + " " + location + " " + name + " " + type + " $" + cost + " $" + balance);
     }
 
-    public String transaction(double change, double balance) {
+    public String transaction(String change, double balance) {
         currentTime = LocalDateTime.now();
-        return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")) + " Change $" + change + " $" + balance);
+        return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")) + " " + change);
     }
 
     private String writeAudit(String auditor) {

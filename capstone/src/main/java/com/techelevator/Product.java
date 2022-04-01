@@ -2,6 +2,7 @@ package com.techelevator;
 
 public abstract class Product {
 
+    public double getPrice;
     private String location;
     private String name;
     private String type;
@@ -28,7 +29,7 @@ public abstract class Product {
         return name;
     }
 
-    public double getPrice() {
+    public double getPrice(String itemInput) {
         return price;
     }
 
