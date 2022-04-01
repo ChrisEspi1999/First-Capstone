@@ -5,6 +5,7 @@ import com.techelevator.view.Menu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.NumberFormat;
 import java.util.*;
 
 public class CaTEringCapstoneCLI {
@@ -20,6 +21,7 @@ public class CaTEringCapstoneCLI {
     private String purchaseInput = "";
     private String itemInput = "";
     private int moneyInput = 0;
+    NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
     public CaTEringCapstoneCLI(Menu menu) {
         this.menu = menu;
@@ -137,7 +139,8 @@ public class CaTEringCapstoneCLI {
 
                 if (moneyInput == 1 || moneyInput == 5 || moneyInput == 10 || moneyInput == 20) {
                     currentMoneyAvailable += 1.0 * moneyInput;
-                    System.out.println("Current money available: $" + String.format("%.2f", currentMoneyAvailable)); // SOP ""
+                    String moneyAvailable = formatter.format(currentMoneyAvailable);
+                    System.out.println("Current money available: $" + moneyAvailable); // SOP ""
                 } else if (moneyInput == 0) {
                     purchaseItems();
                 } else {
@@ -145,7 +148,8 @@ public class CaTEringCapstoneCLI {
                     System.out.println("");
 
                 }
-                String audit = new Audit().moneyFeed(moneyInput, currentMoneyAvailable);
+                double input = moneyInput * 1.0;
+                String audit = new Audit().moneyFeed(input, currentMoneyAvailable);
             } while (keepGoing);
         } catch (NumberFormatException e) {
             System.out.println("Invalid Input");
@@ -165,33 +169,36 @@ public class CaTEringCapstoneCLI {
         String itemInput = userInput.nextLine().toUpperCase();
 
         boolean isFound = false;
-            for (Product product : productList) {
+        for (Product product : productList) {
 
 
-                if (product.getLocation().equals(itemInput)) {
-                    isFound = true;
+            if (product.getLocation().equals(itemInput)) {
+                isFound = true;
 
-                    if (currentMoneyAvailable - product.getPrice(itemInput) < 0 && product.getLocation().equals(itemInput)) {
-                        System.out.println("Not enough money");
+                if (currentMoneyAvailable - product.getPrice(itemInput) < 0 && product.getLocation().equals(itemInput)) {
+                    System.out.println("Not enough money");
 
-                    } else {
-                        product.decreaseInventory();
-                        if (product.getQuantity() != 0) {
-                            product.getSound();
-                            currentMoneyAvailable -= product.getPrice(itemInput);
+                } else {
+                    product.decreaseInventory();
+                    if (product.getQuantity() != 0) {
+                        product.getSound();
+                        String balance = formatter.format(currentMoneyAvailable);
+                        currentMoneyAvailable -= product.getPrice(itemInput);
 
-                        }
-//                    }String audit = new Audit().itemPurchased(productList.get(Integer.parseInt(itemInput)).getLocation(), productList.get(Integer.parseInt(itemInput)).getName(), productList.get(Integer.parseInt(itemInput)).getType(), productList.get(Integer.parseInt(itemInput)).getPrice, currentMoneyAvailable);
+                        String audit = new Audit().itemPurchased(product.getName(), product.getLocation(), balance, currentMoneyAvailable);
+                    }
                 }
-            }if (!isFound){
+            }
+        }
+        if (!isFound) {
             System.out.println("Invalid selection, returning to PURCHASE MENU");
         }
-        }}
-
-
+    }
 
 
     public String getChange() {
+
+        String balance = formatter.format(currentMoneyAvailable);
 
         int dollars = (int) currentMoneyAvailable;
         double changeMinusDollars = currentMoneyAvailable - (1.0 * dollars);
@@ -201,11 +208,12 @@ public class CaTEringCapstoneCLI {
         double changeMinusDimes = changeMinusQuarters - (dimes * 0.1);
         int nickels = (int) (changeMinusDimes / 0.05);
 
-        change = "CHANGE: " + "\r\n" + "Dollar bills: " + dollars + "\r\n" + "Quarters: " + quarters + "\r\n" + "Dimes: " + dimes + "\r\n" + "Nickels: " + nickels;
+        change = "CHANGE: " + "Dollar bills: " + dollars + ", Quarters: " + quarters + ", Dimes: " + dimes + ", Nickels: " + nickels;
         System.out.println("");
         currentMoneyAvailable = 0;
+        String moneyStr = formatter.format(currentMoneyAvailable);
+        String audit = new Audit().transaction(balance, moneyStr);
 
-        String audit = new Audit().transaction(change, currentMoneyAvailable);
         return change;
     }
 }

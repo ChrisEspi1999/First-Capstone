@@ -3,6 +3,7 @@ package com.techelevator.view;
 import com.techelevator.Product;
 
 import java.io.*;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,21 +11,25 @@ import java.time.format.DateTimeFormatter;
 public class Audit {
     private final File output = new File("audit.txt");
     private LocalDateTime currentTime;
+    NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
 
-    public String moneyFeed(double input, double balance) {
+    public String moneyFeed(double input, double currentMoneyAvailable) {
+        String moneyInput = formatter.format(input);
+        String balanceStr = formatter.format(currentMoneyAvailable);
         currentTime = LocalDateTime.now();
-        return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss ")) + " Money in: $" + input + " Balance:" + " $" + balance);
+        return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss ")) + "Money in: " + moneyInput + " Balance:" + " " + balanceStr);
     }
 
-    public String itemPurchased(String location, String name, String type, double cost, double balance) {
+    public String itemPurchased(String name, String location,String balance, double currentMoneyAvailable) {
+        String moneyStr = formatter.format(currentMoneyAvailable);
         currentTime = LocalDateTime.now();
-        return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")) + " " + location + " " + name + " " + type + " $" + cost + " $" + balance);
+        return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")) + " " + name + " (" + location + ") " + balance + " Balance: " + moneyStr);
     }
 
-    public String transaction(String change, double balance) {
+    public String transaction(String balance, String moneyStr) {
         currentTime = LocalDateTime.now();
-        return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")) + " " + change);
+        return writeAudit(currentTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")) + " Change: " + balance + " Balance: " + moneyStr);
     }
 
     private String writeAudit(String auditor) {
