@@ -15,9 +15,17 @@ public class CaTEringCapstoneCLI {
     private double currentMoneyAvailable = 0;
     boolean keepGoing = true;
     private String change = "";
+    private String menuInput = "";
+    private String purchaseInput = "";
+    private String itemInput = "";
+    private int moneyInput = 0;
 
     public CaTEringCapstoneCLI(Menu menu) {
         this.menu = menu;
+    }
+
+    public CaTEringCapstoneCLI() {
+
     }
 
     public static void main(String[] args) {
@@ -52,14 +60,14 @@ public class CaTEringCapstoneCLI {
         } catch (FileNotFoundException e) {
             System.out.println();
         }
-        System.out.println("MAIN MENU: ");
         displayMainMenu();
     }
 
-    public void displayMainMenu(){
-        do {
-            this.menu.DisplayMainMenu();
-            String menuInput = userInput.nextLine().toUpperCase();
+    public void displayMainMenu() {
+        do{
+        System.out.println("MAIN MENU: ");
+        this.menu.DisplayMainMenu();
+        String menuInput = userInput.nextLine().toUpperCase();
 
             if (menuInput.equals("D")) {
                 displayItems();
@@ -71,14 +79,15 @@ public class CaTEringCapstoneCLI {
                 System.out.println("Have a good day!");
                 System.exit(0);
             } else {
-                System.out.println("Invalid input");
+                System.out.println("Invalid input, returning to MAIN MENU");
+                System.out.println("");
             }
-        } while (keepGoing);
+        }while(keepGoing);
     }
 
     public void displayItems() {
         System.out.println("AVAILABLE ITEMS: ");
-        
+
             for (Product product : productList)
             System.out.println("(" + product.getLocation() + ") " + product.getName() + " " + product.getType() + ":\t $" + product.getPrice() + "\t Available: " + product.getQuantity());
     }
@@ -94,6 +103,7 @@ public class CaTEringCapstoneCLI {
 
             String menuInput = userInput.nextLine().toUpperCase();
 
+
             if (menuInput.equals("M")) {
                 feedMoney();
             } else if (menuInput.equals("S")) {
@@ -106,40 +116,43 @@ public class CaTEringCapstoneCLI {
                 System.out.println(change);
                 System.out.println("");
 
-                keepGoing = false;
+                keepGoing = false; // SOP after saying "returning to main menu
                 displayMainMenu();
 
             } else {
-                System.out.println("Invalid input");
+                System.out.println("Invalid input, returning to PURCHASE MENU");
+                System.out.println("");
             }
         } while (keepGoing);
     }
 
     public void feedMoney() {
-        System.out.println("");
+        System.out.println(""); // Exception for user inputting decimal number or letter- disconnects
         do {
             System.out.println("INSERT MONEY: (Accepts $1, $5, $10, or $20) OR Enter 0 to return to PURCHASE MENU: ");
             int moneyInput = Integer.parseInt(userInput.nextLine());
 
             if (moneyInput == 1 || moneyInput == 5 || moneyInput == 10 || moneyInput == 20) {
                 currentMoneyAvailable += 1.0 * moneyInput;
-                System.out.println("Current money available: $" + String.format("%.2f", currentMoneyAvailable));
+                System.out.println("Current money available: $" + String.format("%.2f", currentMoneyAvailable)); // SOP ""
             } else if (moneyInput == 0) {
                 purchaseItems();
             } else {
-                System.out.println("Invalid Input");
+                System.out.println("Invalid Input, insert $1, $5, $10, or $20");
+                System.out.println("");
             }
         } while (keepGoing);
     }
 
-    public void selectItems() {
+    public void selectItems() { 
         System.out.println("");
         System.out.println("SELECT ITEM: ");
 
         for (Product product : productList)
-            System.out.println(product.getLocation() + " " + product.getName() + " " + product.getType() + ": $" + product.getPrice() + " Available: " + product.getQuantity());
+            System.out.println("(" + product.getLocation() + ") " + product.getName() + " " + product.getType() + ": $" + product.getPrice() + " Available: " + product.getQuantity()); // ()
 
         String itemInput = userInput.nextLine().toUpperCase();
+
 
         try{
             for (Product product : productList) {
@@ -157,12 +170,17 @@ public class CaTEringCapstoneCLI {
                         purchaseItems();
                     }
                 }
+                else{
+                    System.out.println("Invalid selection, returning to PURCHASE MENU");
+                }
             }
+
         }catch(Exception e){
-            System.out.println("Invalid selection");
+            System.out.println("Invalid selection, returning to PURCHASE MENU");
             purchaseItems();
         }
     }
+
 
     public String getChange(){
 
