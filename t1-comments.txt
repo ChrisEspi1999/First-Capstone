@@ -1,0 +1,13 @@
+- Overall, great job!
+
+- Minor cleanup issues with unused commented out code and unused
+imports.
+
+- Rename the getChange class. This sounds too much like the name
+of a method. Class names are supposed to be capitalized. You 
+could go for something like "ChangeMaker" or "ChangeDispenser".
+
+On that note, this class could have also had a property to record
+how much money has been fed in, as opposed to having the CLI
+store this information.
+
